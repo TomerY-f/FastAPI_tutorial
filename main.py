@@ -76,13 +76,11 @@ async def create_member(member: MadorMemberModel = Body(...)):
 
 @app.get("/", response_description="List all members", response_model=List[MadorMemberModel])
 async def list_members():
-    students = db["members"].find().to_list(1000)
+    students = list(db["members"].find())
     return students
 
 
-@app.get(
-    "/{id}", response_description="Get a single mador member", response_model=MadorMemberModel
-)
+@app.get("/{id}", response_description="Get a single mador member", response_model=MadorMemberModel)
 async def show_member(id: str):
     if (member := db["members"].find_one({"_id": id})) is not None:
         return member
